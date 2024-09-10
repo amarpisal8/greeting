@@ -1,42 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Martel:wght@200;300;400;600;700;800;900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f8f9fa;
+  font-family: 'Martel', serif;
+  background-color: #f0f8ff;
+  color: #333;
+  text-align: center;
+  padding: 10px;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 360px;
+  height: auto;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  position: relative;
+  animation: slideIn 1s ease-in-out;
+  overflow: hidden;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+header {
+  background-color: #ff6f61;
+  padding: 10px;
+  border-radius: 15px 15px 0 0;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: 24px;
+  color: #3d5afe;
+  margin: 20px 0;
+  animation: fadeIn 1.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+p {
+  font-size: 16px;
+  margin: 15px 0;
+  line-height: 1.5;
+}
+
+p:first-of-type {
+  font-weight: 600;
+  color: #3d5afe;
+}
+
+footer {
+  font-size: 14px;
+  color: #777;
+  padding: 10px;
+}
+
+button {
+  background-color: #ff6f61;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 25px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 20px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+button:hover {
+  background-color: #3d5afe;
+}
+
+/* Media query for iPhone SE screen (360x640px) */
+@media only screen and (max-width: 360px) and (max-height: 640px) {
+  body {
+    padding: 5px;
   }
   
   .container {
-    padding: 20px;
-    margin-top: 125px;
-    max-width: 360px;
+    padding: 10px;
+    height: auto;
   }
   
-  .card {
-    border-radius: 12px;
-    border: 1px solid #e3e6f0;
-    background-color: #ffffff;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .greeting-to {
+  h1 {
     font-size: 20px;
-    color: #333333;
+    margin: 10px 0;
   }
   
-  .greeting-para {
+  p {
     font-size: 14px;
-    color: #555555;
-  }
-  
-  .greeting-greet {
-    font-size: 22px;
-    color: #007bff;
-  }
-  
-  #to, #firstParaInput, #greetInput, #secParaInput {
-    font-size: 14px;
+    margin: 10px 0;
   }
   
   button {
-    background-color: #007bff;
-    font-size: 16px;
+    padding: 8px 12px;
+    font-size: 12px;
   }
-  
+}

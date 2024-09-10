@@ -1,58 +1,130 @@
-const apiUrl = "https://crudcrud.com/api/641a0ce5dd9d4599b46bf7b7fc82a548/lettersss";
+const API_URL = 'https://crudcrud.com/api/d10764e63eae435f8e2def82eb9c72b8/letter';
 
-// Function to fetch the latest greeting data and display it
-async function fetchGreeting() {
-  try {
-    const response = await fetch(apiUrl);
-    const data = await response.json();
+const cardContainer = document.getElementById('card-container');
+const cardForm = document.getElementById('card-form');
+const createCardBtn = document.getElementById('create-card-btn');
 
-    if (data.length > 0) {
-      const latestGreeting = data[data.length - 1];  // Get the last added greeting
-      document.getElementById('toName').innerText = latestGreeting.to;
-      document.getElementById('firstPara').innerText = latestGreeting.firstPara;
-      document.getElementById('greet').innerText = latestGreeting.greet;
-      document.getElementById('secPara').innerText = latestGreeting.secPara;
+async function fetchGreetingCards() {
+    try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+        renderCards(data);
+    } catch (error) {
+        console.error('Error fetching greeting cards:', error);
     }
-  } catch (error) {
-    console.error("Error fetching greeting:", error);
-  }
 }
 
-// Function to handle form submission
-document.getElementById('greetingForm').addEventListener('submit', async function (e) {
-  e.preventDefault();
+async function createGreetingCard(cardData) {
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(cardData)
+        });
 
-  const toName = document.getElementById('to').value;
-  const firstPara = document.getElementById('firstParaInput').value;
-  const greet = document.getElementById('greetInput').value;
-  const secPara = document.getElementById('secParaInput').value;
+        const createdCard = await response.json();
+        renderCard(createdCard);
+        cardForm.style.display = 'none';
+        createCardBtn.style.display = 'block';
+    } catch (error) {
+        console.error('Error creating greeting card:', error);
+    }
+}
 
-  const newGreeting = {
-    to: toName,
-    firstPara: firstPara,
-    greet: greet,
-    secPara: secPara,
-  };
+async function updateGreetingCard(cardId, updatedData) {
+    try {
+        const response = await fetch(`${API_URL}/${cardId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedData)
+        });
 
-  try {
-    // Post the new greeting to the API
-    await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(newGreeting)
+        const updatedCard = await response.json();
+        renderCard(updatedCard);
+    } catch (error) {
+        console.error('Error updating greeting card:', error);
+    }
+}
+
+async function deleteGreetingCard(cardId) {
+    try {
+        const response = await fetch(`${API_URL}/${cardId}`, {
+            method: 'DELETE'
+        });
+
+        console.log('Card deleted successfully');
+        fetchGreetingCards();
+    } catch (error) {
+        console.error('Error deleting greeting card:', error);
+    }
+}
+
+function renderCards(cards) {
+    cardContainer.innerHTML = '';
+    cards.forEach(card => renderCard(card));
+}
+
+function renderCard(card) {
+    const cardElement = document.createElement('div');
+    cardElement.classList.add('card');
+
+    const toElement = document.createElement('h2');
+    toElement.textContent = `To: ${card.to}`;
+
+    const firstMessageElement = document.createElement('p');
+    firstMessageElement.textContent = card.firstMessage;
+
+    const greetElement = document.createElement('h1');
+    greetElement.textContent = card.greet;
+
+    const secondMessageElement = document.createElement('p');
+    secondMessageElement.textContent = card.secondMsg;
+
+    const editBtn = document.createElement('button');
+    editBtn.textContent = 'Edit';
+    editBtn.addEventListener('click', () => {
+        cardForm.style.display = 'block';
+        createCardBtn.style.display = 'none';
+
+        document.getElementById('to').value = card.to;
+        document.getElementById('firstMessage').value = card.firstMessage;
+        document.getElementById('greet').value = card.greet;
+        document.getElementById('secondMessage').value = card.secondMsg;
     });
 
-    // Update the greeting card with the new data
-    fetchGreeting();
-  } catch (error) {
-    console.error("Error posting greeting:", error);
-  }
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = 'Delete';
+    deleteBtn.addEventListener('click', () => deleteGreetingCard(card._id));
 
-  // Clear the form
-  document.getElementById('greetingForm').reset();
+    cardElement.appendChild(toElement);
+    cardElement.appendChild(firstMessageElement);
+    cardElement.appendChild(greetElement);
+    cardElement.appendChild(secondMessageElement);
+    cardElement.appendChild(editBtn);
+    cardElement.appendChild(deleteBtn);
+
+    cardContainer.appendChild(cardElement);
+}
+
+fetchGreetingCards();
+
+cardForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const cardData = {
+        to: document.getElementById('to').value,
+        firstMessage: document.getElementById('firstMessage').value,
+        greet: document.getElementById('greet').value,
+        secondMessage: document.getElementById('secondMessage').value
+    };
+
+    createGreetingCard(cardData);
 });
 
-// Fetch and display the latest greeting on page load
-fetchGreeting();
+createCardBtn.addEventListener('click', () => {
+    cardForm.style.display = 'block';
+    createCardBtn.style.display = 'none';
+});
