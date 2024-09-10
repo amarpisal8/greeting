@@ -8,7 +8,8 @@
 
 body {
   font-family: 'Martel', serif;
-  background-color: #f0f8ff;
+  background: rgb(131,58,180);
+  background: linear-gradient(90deg, rgba(131,58,180,0.3620689655172413) 0%, rgba(253,29,29,0.4913793103448276) 50%, rgba(252,176,69,0.5668103448275862) 100%);
   color: #333;
   text-align: center;
   padding: 10px;
